@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Welcome, {{ current_user.full_name }}! 👋</h1>
+            <p>
+                {% if current_user.role == "student" %}
+                    Student Dashboard — Post requests and
+                    track your tutoring sessions
+                {% else %}
+                    Tutor Dashboard — Browse and accept
+                    tutoring requests from students
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            {% if current_user.role == "student" %}
+            <a href="/request/new" class="btn">
+                + Post New Request
+            </a>
+            {% else %}
+            <span style="
+                background: rgba(255,255,255,0.15);
+                padding: 8px 18px;
+                border-radius: 50px;
+                font-size: 14px;
+                color: white;">
+                🎓 Tutor Account
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════ -->
+    <!-- STUDENT VIEW                       -->
+    <!-- ══════════════════════════════════ -->
+    {% if current_user.role == "student" %}
+
+        <h3 class="section-title">📋 My Requests</h3>
+
+        {% if requests %}
+            {% for req in requests %}
+            <div class="request-card"
+                {% if req.status == "accepted" %}
+                style="border-left: 4px solid #27ae60;"
+                {% endif %}>
+                <div class="request-info">
+                    <h4>{{ req.subject }}</h4>
+                    <p>
+                        <strong>Topic:</strong> {{ req.topic }}
+                    </p>
+                    <p>{{ req.description }}</p>
+
+                    <!-- Show session info if accepted -->
+                    {% if req.status == "accepted" and
+                        req.id in request_sessions %}
+                    <div style="margin-top: 12px;
+                        background: #d4edda;
+                        padding: 15px;
+                        border-radius: 10px;">
+                        <p style="color: #155724;
+                            font-weight: 700;
+                            font-size: 15px;
+                            margin-bottom: 8px;">
+                            ✅ A tutor has accepted 
+                            your request!
+                        </p>
+                        <p style="color: #155724;
+                            font-size: 14px;
+                            margin-bottom: 5px;">
+                            📅 Session scheduled for:
+                            <strong>
+                            {{ request_sessions[req.id]
+                                .scheduled_time.strftime(
+                                '%d %b %Y at %I:%M %p') }}
+                            </strong>
+                        </p>
+                        <p style="color: #155724;
+                            font-size: 14px;
+                            margin-bottom: 12px;">
+                            🎓 Tutor:
+                            <strong>
+                            {{ request_sessions[req.id]
+                                .tutor.full_name }}
+                            </strong>
+                        </p>
+                        <a href="/chat/{{ 
+                            request_sessions[req.id].id }}"
+                            class="btn btn-success"
+                            style="font-size: 14px;
+                            padding: 10px 20px;">
+                            💬 Open Chat with Tutor
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="request-actions">
+                    {% if req.status == "open" %}
+                    <span class="badge badge-open">
+                        Open
+                    </span>
+                    {% elif req.status == "accepted" %}
+                    <span class="badge badge-accepted">
+                        Accepted
+                    </span>
+                    {% else %}
+                    <span class="badge badge-closed">
+                        Closed
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>No requests yet</h3>
+                <p>Post your first tutoring request
+                to get started</p>
+                <a href="/request/new" class="btn">
+                    Post a Request
+                </a>
+            </div>
+        {% endif %}
+
+        <h3 class="section-title" style="margin-top: 40px;">
+            🌐 All Open Requests
+        </h3>
+
+        {% if open_requests %}
+            {% for req in open_requests %}
+            <div class="request-card">
+                <div class="request-info">
+                    <h4>{{ req.subject }}</h4>
+                    <p>
+                        <strong>Topic:</strong> {{ req.topic }}
+                    </p>
+                    <p>{{ req.description }}</p>
+                    <p style="color: #999; font-size: 13px;">
+                        Posted by: {{ req.student.full_name }}
+                    </p>
+                </div>
+                <div class="request-actions">
+                    <span class="badge badge-open">Open</span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>No open requests at the moment</h3>
+                <p>Be the first to post a request!</p>
+            </div>
+        {% endif %}
+
+    <!-- ══════════════════════════════════ -->
+    <!-- TUTOR VIEW                         -->
+    <!-- ══════════════════════════════════ -->
+    {% else %}
+
+        <!-- My Accepted Sessions -->
+        {% if accepted_requests %}
+        <h3 class="section-title">
+            ✅ My Accepted Sessions
+        </h3>
+        <p style="color: #666; margin-bottom: 25px;">
+            Sessions you have scheduled with students
+        </p>
+
+        {% for item in accepted_requests %}
+        <div class="request-card"
+            style="border-left: 4px solid #27ae60;">
+            <div class="request-info">
+                <h4>{{ item.req.subject }}</h4>
+                <p>
+                    <strong>Topic:</strong>
+                    {{ item.req.topic }}
+                </p>
+                <p>{{ item.req.description }}</p>
+                <p style="color: #999; font-size: 13px;
+                    margin-top: 8px;">
+                    👤 Student:
+                    {{ item.req.student.full_name }}
+                </p>
+            </div>
+            <div class="request-actions">
+                <span class="badge badge-accepted">
+                    Accepted
+                </span>
+                <div style="text-align: right;
+                    margin-top: 8px;">
+                    <div style="font-size: 13px;
+                        color: #3498db;
+                        font-weight: 600;">
+                        📅 Scheduled:
+                    </div>
+                    <div style="font-size: 14px;
+                        color: #333;
+                        font-weight: 700;
+                        margin-bottom: 10px;">
+                        {{ item.session.scheduled_time
+                            .strftime('%d %b %Y at %I:%M %p') }}
+                    </div>
+                </div>
+                <a href="/chat/{{ item.session.id }}"
+                    class="btn btn-success"
+                    style="font-size: 13px;
+                    padding: 8px 18px;">
+                    💬 Chat with Student
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div style="margin-top: 40px;"></div>
+        {% endif %}
+
+        <!-- Open Requests -->
+        <h3 class="section-title">
+            🌐 Open Tutoring Requests
+        </h3>
+        <p style="color: #666; margin-bottom: 25px;">
+            Browse requests from students and accept
+            ones you can help with
+        </p>
+
+        {% if open_requests %}
+            {% for req in open_requests %}
+            <div class="request-card">
+                <div class="request-info">
+                    <h4>{{ req.subject }}</h4>
+                    <p>
+                        <strong>Topic:</strong> {{ req.topic }}
+                    </p>
+                    <p>{{ req.description }}</p>
+                    <p style="color: #999; font-size: 13px;
+                        margin-top: 8px;">
+                        👤 Posted by:
+                        {{ req.student.full_name }}
+                    </p>
+                </div>
+                <div class="request-actions">
+                    <span class="badge badge-open">Open</span>
+                    <a href="/request/{{ req.id }}/accept"
+                        class="btn btn-success"
+                        style="font-size: 13px;
+                        padding: 8px 18px;
+                        margin-top: 10px;">
+                        ✓ Accept Request
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>No open requests at the moment</h3>
+                <p>Check back later for new student requests</p>
+            </div>
+        {% endif %}
+
+    {% endif %}
+    <!-- END OF DASHBOARD -->
+
+</div>
+{% endblock %}

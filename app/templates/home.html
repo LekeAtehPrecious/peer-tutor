@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" 
+    href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-badge">🎓 Free Peer Tutoring Platform</div>
+
+    <h1>Learn Better,<br>
+        <span>Together</span>
+    </h1>
+
+    <p>Connect with fellow students for free academic support.
+        Post requests, find tutors, and book sessions —
+        all in one place.
+    </p>
+
+    <div class="hero-buttons">
+        <a href="/register" class="btn-primary">
+            Get Started Free →
+        </a>
+        <a href="/login" class="btn-secondary">Login</a>
+    </div>
+
+    <div class="hero-stats">
+        <div>
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Students</div>
+        </div>
+        <div>
+            <div class="stat-number">200+</div>
+            <div class="stat-label">Tutors</div>
+        </div>
+        <div>
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Subjects</div>
+        </div>
+        <div>
+            <div class="stat-number">4.8★</div>
+            <div class="stat-label">Rating</div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="container">
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2>Everything You Need to
+                <span>Succeed</span>
+            </h2>
+            <p>PeerTutor makes academic support simple,
+                accessible, and completely free.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card border-blue">
+                <div class="feature-icon">📚</div>
+                <h3>Post Requests</h3>
+                <p>Struggling with a subject? Post a tutoring
+                    request in seconds and get matched with
+                    the right peer tutor.</p>
+            </div>
+            <div class="feature-card border-red">
+                <div class="feature-icon">🤝</div>
+                <h3>Find Tutors</h3>
+                <p>Browse available peer tutors by subject
+                    and connect with students who have
+                    the knowledge you need.</p>
+            </div>
+            <div class="feature-card border-green">
+                <div class="feature-icon">📅</div>
+                <h3>Book Sessions</h3>
+                <p>Schedule tutoring sessions at times
+                    that work for both of you and track
+                    your progress on your dashboard.</p>
+            </div>
+            <div class="feature-card border-purple">
+                <div class="feature-icon">⭐</div>
+                <h3>Rate Tutors</h3>
+                <p>After each session, rate your tutor and
+                    leave a review to help other students
+                    find the best support.</p>
+            </div>
+            <div class="feature-card border-orange">
+                <div class="feature-icon">📊</div>
+                <h3>Track Progress</h3>
+                <p>Monitor your tutoring history, upcoming
+                    sessions, and academic improvement
+                    from your personal dashboard.</p>
+            </div>
+            <div class="feature-card border-teal">
+                <div class="feature-icon">🆓</div>
+                <h3>100% Free</h3>
+                <p>No subscriptions, no hidden fees.
+                    PeerTutor is completely free for all
+                    students and tutors.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="section-header">
+            <h2>How It <span>Works</span></h2>
+            <p>Get started in 3 simple steps</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number" 
+                style="background: #3498db;">1</div>
+                <h3>Create Account</h3>
+                <p>Register as a student or tutor
+                    in less than 2 minutes.
+                    No credit card needed.</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number"
+                style="background: #e74c3c;">2</div>
+                <h3>Post or Browse</h3>
+                <p>Students post requests.
+                    Tutors browse and
+                    accept sessions.</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number"
+                style="background: #27ae60;">3</div>
+                <h3>Learn Together</h3>
+                <p>Attend your session,
+                    learn, and rate your
+                    experience afterwards.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <h2>What Students <span>Say</span></h2>
+            <p>Real experiences from real students</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "PeerTutor helped me pass my calculus
+                    exam! I found a tutor within hours
+                    and the session was incredibly helpful."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"
+                    style="background: linear-gradient(
+                    135deg, #3498db, #9b59b6);">A</div>
+                    <div>
+                        <div class="author-name">Amara N.</div>
+                        <div class="author-role">
+                            Year 2 Student</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "As a tutor, I love helping other
+                    students. The platform is so easy
+                    to use and I can manage my sessions
+                    from the dashboard."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"
+                    style="background: linear-gradient(
+                    135deg, #27ae60, #3498db);">K</div>
+                    <div>
+                        <div class="author-name">Kevin T.</div>
+                        <div class="author-role">
+                            Year 3 Tutor</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★☆</div>
+                <p class="testimonial-text">
+                    "I struggled with Python programming
+                    for weeks. After just two sessions
+                    on PeerTutor I finally understood
+                    the concepts!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"
+                    style="background: linear-gradient(
+                    135deg, #e74c3c, #f39c12);">P</div>
+                    <div>
+                        <div class="author-name">
+                            Precious L.</div>
+                        <div class="author-role">
+                            Year 1 Student</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <h2>About <span>PeerTutor</span></h2>
+        <p>PeerTutor was built as part of a Software
+            Construction and Evolution project at the
+            University of Buea, College of Technology.
+            It addresses the real problem of students
+            lacking access to affordable academic support
+            by creating a free, structured peer tutoring
+            platform.</p>
+        <div class="about-stats">
+            <div>
+                <div class="about-stat-label">Built With</div>
+                <div class="about-stat-value">
+                    Python / Flask</div>
+            </div>
+            <div>
+                <div class="about-stat-label">Database</div>
+                <div class="about-stat-value">SQLite</div>
+            </div>
+            <div>
+                <div class="about-stat-label">DevOps</div>
+                <div class="about-stat-value">
+                    Jenkins · Docker · SonarCloud</div>
+            </div>
+            <div>
+                <div class="about-stat-label">Course</div>
+                <div class="about-stat-value">CEC418</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Start Learning?</h2>
+        <p>Join hundreds of students already using PeerTutor</p>
+        <a href="/register" class="btn-gradient">
+            Join PeerTutor Free →
+        </a>
+    </section>
+
+</div>
+{% endblock %}

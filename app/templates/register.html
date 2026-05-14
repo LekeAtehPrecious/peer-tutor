@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <span>PeerTutor</span>
+        </div>
+
+        <h2 class="auth-title">Create an Account</h2>
+        <p class="auth-subtitle">
+            Join thousands of students already learning together
+        </p>
+
+        <form method="POST" action="/register" 
+            id="registerForm" novalidate>
+
+            <!-- Full Name -->
+            <div class="form-group">
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    name="full_name"
+                    id="full_name"
+                    placeholder="Enter your full name"
+                    minlength="3"
+                    required>
+                <small class="error-msg" 
+                    id="full_name_error"></small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label>Email Address</label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your email address"
+                    required>
+                <small class="error-msg" 
+                    id="email_error"></small>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Min 6 characters"
+                    minlength="6"
+                    required>
+                <small class="error-msg" 
+                    id="password_error"></small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input
+                    type="password"
+                    name="confirm_password"
+                    id="confirm_password"
+                    placeholder="Repeat your password"
+                    required>
+                <small class="error-msg" 
+                    id="confirm_error"></small>
+            </div>
+
+            <!-- Role -->
+            <div class="form-group">
+                <label>I am registering as a:</label>
+                <div class="role-selector">
+                    <div class="role-option" 
+                        id="role_student"
+                        onclick="selectRole('student')">
+                        <div class="role-icon">📚</div>
+                        <div class="role-title">Student</div>
+                        <div class="role-desc">
+                            I need tutoring help
+                        </div>
+                    </div>
+                    <div class="role-option"
+                        id="role_tutor"
+                        onclick="selectRole('tutor')">
+                        <div class="role-icon">🎓</div>
+                        <div class="role-title">Tutor</div>
+                        <div class="role-desc">
+                            I can offer help
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="role" id="role">
+                <small class="error-msg" 
+                    id="role_error"></small>
+            </div>
+
+            <button type="submit" class="btn btn-full"
+                onclick="return validateForm()">
+                Create Account
+            </button>
+        </form>
+
+        <hr class="auth-divider">
+
+        <p class="auth-footer-text">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+    </div>
+</div>
+
+<!-- Validation Script -->
+<script>
+    // Role selection
+    function selectRole(role) {
+        document.getElementById('role').value = role;
+
+        document.getElementById('role_student')
+            .style.borderColor = '#e8e8e8';
+        document.getElementById('role_tutor')
+            .style.borderColor = '#e8e8e8';
+        document.getElementById('role_student')
+            .style.background = 'white';
+        document.getElementById('role_tutor')
+            .style.background = 'white';
+
+        document.getElementById('role_' + role)
+            .style.borderColor = '#3498db';
+        document.getElementById('role_' + role)
+            .style.background = '#f0f8ff';
+
+        document.getElementById('role_error')
+            .textContent = '';
+    }
+
+    // Form validation
+    function validateForm() {
+        let valid = true;
+
+        // Full name
+        const fullName = document.getElementById(
+            'full_name').value.trim();
+        if (fullName.length < 3) {
+            document.getElementById('full_name_error')
+                .textContent = 
+                'Full name must be at least 3 characters.';
+            valid = false;
+        } else {
+            document.getElementById('full_name_error')
+                .textContent = '';
+        }
+
+        // Email
+        const email = document.getElementById(
+            'email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('email_error')
+                .textContent = 
+                'Please enter a valid email address.';
+            valid = false;
+        } else {
+            document.getElementById('email_error')
+                .textContent = '';
+        }
+
+        // Password
+        const password = document.getElementById(
+            'password').value;
+        if (password.length < 6) {
+            document.getElementById('password_error')
+                .textContent = 
+                'Password must be at least 6 characters.';
+            valid = false;
+        } else {
+            document.getElementById('password_error')
+                .textContent = '';
+        }
+
+        // Confirm password
+        const confirm = document.getElementById(
+            'confirm_password').value;
+        if (confirm !== password) {
+            document.getElementById('confirm_error')
+                .textContent = 'Passwords do not match.';
+            valid = false;
+        } else {
+            document.getElementById('confirm_error')
+                .textContent = '';
+        }
+
+        // Role
+        const role = document.getElementById('role').value;
+        if (!role) {
+            document.getElementById('role_error')
+                .textContent = 
+                'Please select a role.';
+            valid = false;
+        } else {
+            document.getElementById('role_error')
+                .textContent = '';
+        }
+
+        return valid;
+    }
+
+    // Real time validation
+    document.getElementById('email')
+        .addEventListener('input', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(this.value)) {
+            document.getElementById('email_error')
+                .textContent = 
+                'Please enter a valid email address.';
+        } else {
+            document.getElementById('email_error')
+                .textContent = '';
+        }
+    });
+
+    document.getElementById('confirm_password')
+        .addEventListener('input', function() {
+        const password = document.getElementById(
+            'password').value;
+        if (this.value !== password) {
+            document.getElementById('confirm_error')
+                .textContent = 'Passwords do not match.';
+        } else {
+            document.getElementById('confirm_error')
+                .textContent = '';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Accept Request{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="request-form-card">
+        <h2>✅ Accept Tutoring Request</h2>
+        <p style="color: #666; margin-bottom: 25px;">
+            Review the request and schedule a session time
+        </p>
+
+        <!-- Request Details -->
+        <div style="background: #f8f9ff; padding: 20px;
+            border-radius: 12px; margin-bottom: 25px;
+            border-left: 4px solid #3498db;">
+            <h4 style="color: #1a1a2e; margin-bottom: 10px;">
+                📚 {{ tutoring_request.subject }}
+            </h4>
+            <p style="margin-bottom: 6px;">
+                <strong>Topic:</strong> 
+                {{ tutoring_request.topic }}
+            </p>
+            <p style="color: #555;">
+                {{ tutoring_request.description }}
+            </p>
+            <p style="color: #999; font-size: 13px;
+                margin-top: 10px;">
+                👤 Student: 
+                {{ tutoring_request.student.full_name }}
+            </p>
+        </div>
+
+        <!-- Schedule Form -->
+        <form method="POST">
+            <div class="form-group">
+                <label>📅 Schedule Session Date and Time</label>
+                <input type="datetime-local" 
+                    name="scheduled_time"
+                    required
+                    style="width: 100%; padding: 12px;
+                    border: 2px solid #e8e8e8;
+                    border-radius: 10px; font-size: 15px;">
+                <small style="color: #999; margin-top: 6px;
+                    display: block;">
+                    Pick a date and time that works for 
+                    both you and the student
+                </small>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" 
+                    class="btn btn-success"
+                    style="flex: 1; padding: 14px;">
+                    ✓ Confirm & Accept
+                </button>
+                <a href="/dashboard"
+                    class="btn"
+                    style="flex: 1; padding: 14px;
+                    background: #95a5a6; text-align: center;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

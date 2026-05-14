@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <a href="/dashboard" class="back-btn">← Back</a>
+        <div class="chat-header-info">
+            <div class="chat-avatar">
+                {{ other_user.full_name[0].upper() }}
+            </div>
+            <div>
+                <h3>{{ other_user.full_name }}</h3>
+                <p>{{ tutoring_request.subject }} — 
+                    {{ tutoring_request.topic }}</p>
+            </div>
+        </div>
+        <div class="session-time">
+            📅 {{ session.scheduled_time.strftime(
+                '%d %b %Y at %I:%M %p') }}
+        </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-box" id="chat-box">
+
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="message 
+                {% if msg.sender_id == current_user.id %}
+                    sent
+                {% else %}
+                    received
+                {% endif %}">
+                <div class="message-bubble">
+                    {{ msg.content }}
+                </div>
+                <div class="message-time">
+                    {{ msg.timestamp.strftime('%I:%M %p') }}
+                    {% if msg.sender_id != current_user.id %}
+                    · {{ msg.sender.full_name }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-messages">
+                <div style="font-size: 50px; 
+                    margin-bottom: 15px;">💬</div>
+                <p>No messages yet.</p>
+                <p>Start the conversation!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Message Input -->
+    <form method="POST" class="chat-input-form">
+        <input
+            type="text"
+            name="content"
+            placeholder="Type a message..."
+            autocomplete="off"
+            required>
+        <button type="submit" class="send-btn">
+            Send ➤
+        </button>
+    </form>
+
+</div>
+
+<!-- Auto scroll to bottom -->
+<script>
+    const chatBox = document.getElementById('chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+{% endblock %}
