@@ -72,7 +72,7 @@
                             font-weight: 700;
                             font-size: 15px;
                             margin-bottom: 8px;">
-                            ✅ A tutor has accepted 
+                            ✅ A tutor has accepted
                             your request!
                         </p>
                         <p style="color: #155724;
@@ -94,13 +94,25 @@
                                 .tutor.full_name }}
                             </strong>
                         </p>
-                        <a href="/chat/{{ 
-                            request_sessions[req.id].id }}"
-                            class="btn btn-success"
-                            style="font-size: 14px;
-                            padding: 10px 20px;">
-                            💬 Open Chat with Tutor
-                        </a>
+                        <div style="display: flex;
+                            gap: 10px; flex-wrap: wrap;">
+                            <a href="/chat/{{
+                                request_sessions[req.id].id }}"
+                                class="btn btn-success"
+                                style="font-size: 14px;
+                                padding: 10px 20px;">
+                                💬 Open Chat with Tutor
+                            </a>
+                            <a href="/session/{{
+                                request_sessions[req.id].id
+                                }}/complete"
+                                class="btn"
+                                style="font-size: 14px;
+                                padding: 10px 20px;
+                                background: #f39c12;">
+                                ⭐ Complete & Rate Session
+                            </a>
+                        </div>
                     </div>
                     {% endif %}
                 </div>

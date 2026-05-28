@@ -19,6 +19,7 @@ EXPOSE 5000
 # Set environment variables
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=production
+ENV SECRET_KEY=peertutor-secret-key-2026
 
 # Command to run the application
-CMD ["python", "run.py"]
+CMD ["flask", "run", "--host=0.0.0.0"]

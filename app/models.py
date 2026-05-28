@@ -13,11 +13,11 @@ class User(db.Model, UserMixin):
     """Represents a student or tutor in the system."""
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(120), unique=True, 
+    email = db.Column(db.String(120), unique=True,
                       nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(10), nullable=False)
-    created_at = db.Column(db.DateTime, 
+    created_at = db.Column(db.DateTime,
                            default=datetime.utcnow)
 
     requests = db.relationship(
@@ -44,7 +44,7 @@ class TutoringRequest(db.Model):
     topic = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(20), default="open")
-    created_at = db.Column(db.DateTime, 
+    created_at = db.Column(db.DateTime,
                            default=datetime.utcnow)
     student_id = db.Column(
         db.Integer,
@@ -71,7 +71,7 @@ class Session(db.Model):
         db.ForeignKey("user.id"),
         nullable=False
     )
-    created_at = db.Column(db.DateTime, 
+    created_at = db.Column(db.DateTime,
                            default=datetime.utcnow)
     messages = db.relationship(
         "Message",
@@ -84,11 +84,11 @@ class Session(db.Model):
 
 
 class Message(db.Model):
-    """Represents a chat message between student 
+    """Represents a chat message between student
     and tutor."""
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, 
+    timestamp = db.Column(db.DateTime,
                           default=datetime.utcnow)
     sender_id = db.Column(
         db.Integer,
@@ -105,3 +105,34 @@ class Message(db.Model):
 
     def __repr__(self):
         return f"<Message {self.id} from {self.sender_id}>"
+
+
+class Rating(db.Model):
+    """Represents a rating given by a student to a tutor."""
+    id = db.Column(db.Integer, primary_key=True)
+    stars = db.Column(db.Integer, nullable=False)
+    review = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime,
+                           default=datetime.utcnow)
+    session_id = db.Column(
+        db.Integer,
+        db.ForeignKey("session.id"),
+        nullable=False
+    )
+    student_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+    tutor_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+    student = db.relationship(
+        "User", foreign_keys=[student_id])
+    tutor = db.relationship(
+        "User", foreign_keys=[tutor_id])
+
+    def __repr__(self):
+        return f"<Rating {self.stars} stars>"

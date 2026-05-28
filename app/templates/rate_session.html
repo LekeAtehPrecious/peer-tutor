@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Rate Session{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="request-form-card">
+        <h2>⭐ Rate Your Session</h2>
+        <p style="color: #666; margin-bottom: 25px;">
+            How was your tutoring session?
+        </p>
+
+        <!-- Session Details -->
+        <div style="background: #f8f9ff; padding: 20px;
+            border-radius: 12px; margin-bottom: 25px;
+            border-left: 4px solid #3498db;">
+            <h4 style="color: #1a1a2e; margin-bottom: 10px;">
+                📚 {{ tutoring_request.subject }}
+            </h4>
+            <p style="margin-bottom: 6px;">
+                <strong>Topic:</strong>
+                {{ tutoring_request.topic }}
+            </p>
+            <p style="color: #999; font-size: 13px;">
+                🎓 Tutor: {{ session.tutor.full_name }}
+            </p>
+            <p style="color: #999; font-size: 13px;">
+                📅 {{ session.scheduled_time.strftime(
+                    '%d %b %Y at %I:%M %p') }}
+            </p>
+        </div>
+
+        <!-- Rating Form -->
+        <form method="POST">
+
+            <!-- Star Rating -->
+            <div class="form-group">
+                <label>Your Rating</label>
+                <div class="star-rating">
+                    <input type="radio" name="stars"
+                        value="5" id="star5" required>
+                    <label for="star5">⭐</label>
+
+                    <input type="radio" name="stars"
+                        value="4" id="star4">
+                    <label for="star4">⭐</label>
+
+                    <input type="radio" name="stars"
+                        value="3" id="star3">
+                    <label for="star3">⭐</label>
+
+                    <input type="radio" name="stars"
+                        value="2" id="star2">
+                    <label for="star2">⭐</label>
+
+                    <input type="radio" name="stars"
+                        value="1" id="star1">
+                    <label for="star1">⭐</label>
+                </div>
+                <div id="star-display"
+                    style="font-size: 30px;
+                    margin-top: 10px; color: #f39c12;">
+                </div>
+            </div>
+
+            <!-- Review -->
+            <div class="form-group">
+                <label>Written Review (Optional)</label>
+                <textarea name="review" rows="4"
+                    placeholder="Share your experience...">
+                </textarea>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="submit"
+                    class="btn btn-success"
+                    style="flex: 1; padding: 14px;">
+                    ⭐ Submit Rating
+                </button>
+                <a href="/dashboard"
+                    class="btn"
+                    style="flex: 1; padding: 14px;
+                    background: #95a5a6;
+                    text-align: center;">
+                    Skip
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const radios = document.querySelectorAll(
+        'input[name="stars"]');
+    const display = document.getElementById('star-display');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const stars = '⭐'.repeat(this.value);
+            display.textContent = stars;
+        });
+    });
+</script>
+{% endblock %}

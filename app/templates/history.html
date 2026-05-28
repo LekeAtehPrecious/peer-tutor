@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>📜 Session History</h1>
+            <p>Your past tutoring sessions</p>
+        </div>
+        <a href="/dashboard" class="btn"
+            style="background: rgba(255,255,255,0.15);
+            color: white;">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    {% if past_sessions %}
+        {% for item in past_sessions %}
+        <div class="request-card"
+            style="border-left: 4px solid #9b59b6;">
+            <div class="request-info">
+                <h4>{{ item.request.subject }}</h4>
+                <p>
+                    <strong>Topic:</strong>
+                    {{ item.request.topic }}
+                </p>
+                <p style="color: #999; font-size: 13px;
+                    margin-top: 6px;">
+                    📅 {{ item.session.scheduled_time
+                        .strftime('%d %b %Y at %I:%M %p') }}
+                </p>
+
+                {% if current_user.role == "student" %}
+                <p style="color: #999; font-size: 13px;">
+                    🎓 Tutor: 
+                    {{ item.session.tutor.full_name }}
+                </p>
+                {% else %}
+                <p style="color: #999; font-size: 13px;">
+                    👤 Student: 
+                    {{ item.request.student.full_name }}
+                </p>
+                {% endif %}
+
+                {% if item.rating %}
+                <div style="margin-top: 10px;
+                    background: #fff9e6;
+                    padding: 10px 15px;
+                    border-radius: 8px;">
+                    <p style="color: #f39c12;
+                        font-size: 18px;">
+                        {% for i in range(item.rating.stars) %}
+                        ⭐
+                        {% endfor %}
+                    </p>
+                    {% if item.rating.review %}
+                    <p style="color: #555;
+                        font-style: italic;
+                        font-size: 14px;
+                        margin-top: 5px;">
+                        "{{ item.rating.review }}"
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="request-actions">
+                <span class="badge badge-closed">
+                    Completed
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>No session history yet</h3>
+            <p>Your completed sessions will appear here</p>
+            <a href="/dashboard" class="btn">
+                Go to Dashboard
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
