@@ -447,3 +447,53 @@ def admin_login():
         return redirect(url_for("main.admin_login"))
 
     return render_template("admin_login.html")
+@main.route("/admin/delete/user/<int:user_id>")
+@login_required
+def delete_user(user_id):
+    """Admin deletes a user."""
+    if current_user.role != "admin":
+        flash("Access denied.", "danger")
+        return redirect(url_for("main.dashboard"))
+
+    user = User.query.get_or_404(user_id)
+
+    # Delete related records first
+    TutoringRequest.query.filter_by(
+        student_id=user_id).delete()
+    Session.query.filter_by(
+        tutor_id=user_id).delete()
+    Rating.query.filter_by(
+        student_id=user_id).delete()
+    Rating.query.filter_by(
+        tutor_id=user_id).delete()
+
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully.", "success")
+    return redirect(url_for("main.admin"))
+
+
+@main.route("/admin/delete/request/<int:request_id>")
+@login_required
+def delete_request(request_id):
+    """Admin deletes a tutoring request."""
+    if current_user.role != "admin":
+        flash("Access denied.", "danger")
+        return redirect(url_for("main.dashboard"))
+
+    req = TutoringRequest.query.get_or_404(request_id)
+
+    # Delete related sessions first
+    sessions = Session.query.filter_by(
+        request_id=request_id).all()
+    for session in sessions:
+        Message.query.filter_by(
+            session_id=session.id).delete()
+        Rating.query.filter_by(
+            session_id=session.id).delete()
+        db.session.delete(session)
+
+    db.session.delete(req)
+    db.session.commit()
+    flash("Request deleted successfully.", "success")
+    return redirect(url_for("main.admin"))
