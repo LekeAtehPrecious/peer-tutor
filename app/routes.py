@@ -15,18 +15,11 @@ main = Blueprint("main", __name__)
 @main.route("/")
 def home():
     """Home page."""
-    # Get latest real ratings to show on home page
-    from app.models import Rating
     latest_ratings = Rating.query.filter(
-        Rating.review != None,
-        Rating.review != ""
+        Rating.stars != None
     ).order_by(
-        Rating.created_at.desc()).limit(3).all()
-
-    # If no ratings with reviews get all ratings
-    if not latest_ratings:
-        latest_ratings = Rating.query.order_by(
-            Rating.created_at.desc()).limit(3).all()
+        Rating.created_at.desc()
+    ).limit(3).all()
 
     return render_template(
         "home.html",

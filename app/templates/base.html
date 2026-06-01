@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <!-- Navbar -->
+   <!-- Navbar -->
     <nav>
         <a href="/" class="logo">
             <img src="{{ url_for('static',
@@ -25,7 +25,14 @@
             PeerTutor
         </a>
 
-        <div class="nav-links">
+        <!-- Hamburger Menu for Mobile -->
+        <div class="hamburger" onclick="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
             <a href="/">Home</a>
             {% if current_user.is_authenticated %}
                 {% if current_user.role == "admin" %}
@@ -35,7 +42,7 @@
                     <a href="/history">History</a>
                 {% endif %}
                 <span style="color: rgba(255,255,255,0.6);
-                    margin-left: 20px; font-size: 14px;">
+                    font-size: 14px;">
                     👤 {{ current_user.full_name }}
                 </span>
                 <a href="/logout" class="btn-nav"
@@ -58,7 +65,15 @@
             {% endif %}
         </div>
     </nav>
-    
+
+    <!-- Toggle Script -->
+    <script>
+        function toggleNav() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('active');
+        }
+    </script>
+
     <!-- Flash Messages -->
     <div class="container">
         {% with messages = get_flashed_messages(

@@ -8,45 +8,113 @@
 
 {% block content %}
 
-<!-- Hero Section -->
+<!-- Hero Slider Section -->
 <section class="hero">
-    <div class="hero-badge">🎓 Free Peer Tutoring Platform</div>
 
-    <h1>Learn Better,<br>
-        <span>Together</span>
-    </h1>
-
-    <p>Connect with fellow students for free academic support.
-        Post requests, find tutors, and book sessions —
-        all in one place.
-    </p>
-
-    <div class="hero-buttons">
-        <a href="/register" class="btn-primary">
-            Get Started Free →
-        </a>
-        <a href="/login" class="btn-secondary">Login</a>
-    </div>
-
-    <div class="hero-stats">
-        <div>
-            <div class="stat-number">500+</div>
-            <div class="stat-label">Students</div>
+    <!-- Slides -->
+    <div class="slider">
+        <div class="slide active" style="background-image: 
+            url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600');">
         </div>
-        <div>
-            <div class="stat-number">200+</div>
-            <div class="stat-label">Tutors</div>
+        <div class="slide" style="background-image: 
+            url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600');">
         </div>
-        <div>
-            <div class="stat-number">50+</div>
-            <div class="stat-label">Subjects</div>
-        </div>
-        <div>
-            <div class="stat-number">4.8★</div>
-            <div class="stat-label">Rating</div>
+        <div class="slide" style="background-image: 
+            url('https://images.unsplash.com/photo-1529390079861-591de354faf5?w=1600');">
         </div>
     </div>
+
+    <!-- Dark Overlay -->
+    <div class="slider-overlay"></div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+        <div class="hero-badge">🎓 Free Peer Tutoring Platform</div>
+
+        <h1>Learn Better,<br>
+            <span>Together</span>
+        </h1>
+
+        <p>Connect with fellow students for free academic support.
+            Post requests, find tutors, and book sessions —
+            all in one place.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="/register" class="btn-primary">
+                Get Started Free →
+            </a>
+            <a href="/login" class="btn-secondary">Login</a>
+        </div>
+
+        <div class="hero-stats">
+            <div>
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div>
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Tutors</div>
+            </div>
+            <div>
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Subjects</div>
+            </div>
+            <div>
+                <div class="stat-number">4.8★</div>
+                <div class="stat-label">Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Arrow Buttons -->
+    <button class="slider-btn prev" onclick="changeSlide(-1)">
+        &#8592;
+    </button>
+    <button class="slider-btn next" onclick="changeSlide(1)">
+        &#8594;
+    </button>
+
+    <!-- Dot Indicators -->
+    <div class="slider-dots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+    </div>
+
 </section>
+
+<!-- Slider JavaScript -->
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let autoSlide = setInterval(() => changeSlide(1), 4000);
+
+    function changeSlide(direction) {
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+
+        currentSlide = (currentSlide + direction + 
+            slides.length) % slides.length;
+
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+
+    function goToSlide(index) {
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+
+        currentSlide = index;
+
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+
+        clearInterval(autoSlide);
+        autoSlide = setInterval(() => changeSlide(1), 4000);
+    }
+</script>
 
 <!-- Main Content -->
 <div class="container">
@@ -152,65 +220,113 @@
         </div>
 
         <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="stars">★★★★★</div>
-                <p class="testimonial-text">
-                    "PeerTutor helped me pass my calculus
-                    exam! I found a tutor within hours
-                    and the session was incredibly helpful."
-                </p>
-                <div class="testimonial-author">
-                    <div class="author-avatar"
-                    style="background: linear-gradient(
-                    135deg, #3498db, #9b59b6);">A</div>
-                    <div>
-                        <div class="author-name">Amara N.</div>
-                        <div class="author-role">
-                            Year 2 Student</div>
+            {% if latest_ratings %}
+                {% for rating in latest_ratings %}
+                <div class="testimonial-card">
+                    <div class="stars">
+                        {% for i in range(rating.stars) %}⭐{% endfor %}
+                    </div>
+                    <p class="testimonial-text">
+                        "{{ rating.review if rating.review 
+                        else 'Great tutoring session!' }}"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"
+                        style="background: linear-gradient(
+                        135deg, #3498db, #9b59b6);">
+                            {{ rating.student.full_name[0]
+                                .upper() }}
+                        </div>
+                        <div>
+                            <div class="author-name">
+                                {{ rating.student.full_name }}
+                            </div>
+                            <div class="author-role">
+                                Student
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
 
-            <div class="testimonial-card">
-                <div class="stars">★★★★★</div>
-                <p class="testimonial-text">
-                    "As a tutor, I love helping other
-                    students. The platform is so easy
-                    to use and I can manage my sessions
-                    from the dashboard."
-                </p>
-                <div class="testimonial-author">
-                    <div class="author-avatar"
-                    style="background: linear-gradient(
-                    135deg, #27ae60, #3498db);">K</div>
-                    <div>
-                        <div class="author-name">Kevin T.</div>
-                        <div class="author-role">
-                            Year 3 Tutor</div>
+                <!-- Fill remaining slots with defaults -->
+                {% for i in range(3 - latest_ratings|length) %}
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "PeerTutor is an amazing platform 
+                        for students who need academic help!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"
+                        style="background: linear-gradient(
+                        135deg, #27ae60, #3498db);">S</div>
+                        <div>
+                            <div class="author-name">
+                                Student</div>
+                            <div class="author-role">
+                                UB Student</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
 
-            <div class="testimonial-card">
-                <div class="stars">★★★★☆</div>
-                <p class="testimonial-text">
-                    "I struggled with Python programming
-                    for weeks. After just two sessions
-                    on PeerTutor I finally understood
-                    the concepts!"
-                </p>
-                <div class="testimonial-author">
-                    <div class="author-avatar"
-                    style="background: linear-gradient(
-                    135deg, #e74c3c, #f39c12);">P</div>
-                    <div>
-                        <div class="author-name">
-                            Precious L.</div>
-                        <div class="author-role">
-                            Year 1 Student</div>
+            {% else %}
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "PeerTutor helped me pass my 
+                        calculus exam! Amazing platform!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"
+                        style="background: linear-gradient(
+                        135deg, #3498db, #9b59b6);">A</div>
+                        <div>
+                            <div class="author-name">
+                                Amara N.</div>
+                            <div class="author-role">
+                                Year 2 Student</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "As a tutor I love helping other 
+                        students on this platform!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"
+                        style="background: linear-gradient(
+                        135deg, #27ae60, #3498db);">K</div>
+                        <div>
+                            <div class="author-name">
+                                Kevin T.</div>
+                            <div class="author-role">
+                                Year 3 Tutor</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★☆</div>
+                    <p class="testimonial-text">
+                        "I finally understood Python after 
+                        two sessions on PeerTutor!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"
+                        style="background: linear-gradient(
+                        135deg, #e74c3c, #f39c12);">P</div>
+                        <div>
+                            <div class="author-name">
+                                Precious L.</div>
+                            <div class="author-role">
+                                Year 1 Student</div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
 
