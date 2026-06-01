@@ -66,13 +66,43 @@
         </div>
     </nav>
 
-    <!-- Toggle Script -->
-    <script>
-        function toggleNav() {
+   <!-- Toggle Script -->
+<script>
+    function toggleNav() {
+        const nav = document.getElementById('navLinks');
+        nav.classList.toggle('active');
+
+        // Change hamburger icon
+        const hamburger = document.querySelector('.hamburger');
+        hamburger.classList.toggle('open');
+    }
+
+    // Close navbar when clicking a link
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.nav-links a');
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                const nav = document.getElementById('navLinks');
+                nav.classList.remove('active');
+                const hamburger = document.querySelector(
+                    '.hamburger');
+                hamburger.classList.remove('open');
+            });
+        });
+
+        // Close navbar when clicking outside
+        document.addEventListener('click', function(e) {
             const nav = document.getElementById('navLinks');
-            nav.classList.toggle('active');
-        }
-    </script>
+            const hamburger = document.querySelector(
+                '.hamburger');
+            if (!nav.contains(e.target) && 
+                !hamburger.contains(e.target)) {
+                nav.classList.remove('active');
+                hamburger.classList.remove('open');
+            }
+        });
+    });
+</script>
 
     <!-- Flash Messages -->
     <div class="container">
