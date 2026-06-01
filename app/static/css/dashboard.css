@@ -180,3 +180,76 @@
     color: #1a1a2e;
     margin-bottom: 25px;
 }
+/* ========================================
+   RESPONSIVE DASHBOARD
+======================================== */
+
+@media (max-width: 768px) {
+
+    .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 22px;
+    }
+
+    .request-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .request-actions {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .request-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .request-form-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header {
+        padding: 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 20px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .request-card {
+        padding: 18px;
+    }
+
+    .request-info h4 {
+        font-size: 16px;
+    }
+
+    .btn {
+        width: 100%;
+        display: block;
+    }
+}
